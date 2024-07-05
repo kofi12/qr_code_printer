@@ -1,15 +1,9 @@
-import PIL.Image
+import qrcode
 import pytest
-from models.model import QRCode
+import qrcode
+from models.model import QRC
 from controller.qr_controller import *
 
-@pytest.fixture
-def test_data():
-  return {
-    'is_winner' : False
-  }
-
-
-def test_generate_qr(test_data) -> bool:
-	qrcode = generate_qr(test_data)
-	return isinstance(qrcode, PIL.Image)
+def test_generate_qr() -> bool:
+	qr_code = generate_qr('This is a test')
+	return isinstance(qr_code, qrcode.image.pil.PilImage)

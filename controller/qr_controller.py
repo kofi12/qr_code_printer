@@ -1,5 +1,4 @@
-import PIL.Image
-from models.model import QRCode
+from models.model import QRC
 import qrcode
 import pyzbar
 import json
@@ -13,6 +12,6 @@ import json
 
 """
 
-async def generate_qr(qr: QRCode):
+async def generate_qr(qr: str):
     data = json.dumps(qr)
     return qrcode.make(data)
