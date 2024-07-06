@@ -1,7 +1,5 @@
-import qrcode
 import pytest
-import qrcode
-from models.model import QRC
+from qrcode import image
 from controller.qr_controller import *
 
 def test_generate_qr() -> bool:
