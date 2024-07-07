@@ -4,3 +4,5 @@
 .env
 tests/__pycache__/
 __pycache__
+migrations/
+alembic.ini

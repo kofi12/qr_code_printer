@@ -12,13 +12,13 @@ class QRC (SQLModel):
     url: str
 
 class User (SQLModel):
-    id: int
+    id: int | None = Field(default=None, primary_key=True)
     name: str
     email: str
     password: str
     qr_code: list[QRC] = []
 
 class Batch (SQLModel):
-    id: int
+    id: int | None = Field(default=None, primary_key=True)
     date_created: datetime = Field(default_factory=datetime.now)
     qr_list: list[QRC] = []
