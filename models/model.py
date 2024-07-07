@@ -8,6 +8,7 @@ class QRC (BaseModel):
     is_winner: bool
     date_created: datetime = Field(default_factory=datetime.now)
     date_scanned: datetime | None = None
+    url: str
 
 class User (BaseModel) :
     id: int

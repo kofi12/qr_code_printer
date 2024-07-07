@@ -1,5 +1,5 @@
 from models.model import QRC
-import qrcode
+import segno
 import pyzbar
 import json
 
@@ -12,6 +12,6 @@ import json
 
 """
 
-async def generate_qr(qr: str):
-    data = json.dumps(qr)
-    return qrcode.make(data)
+def generate_qr(qr: str) -> segno.QRCode:
+    qrcode = segno.make(qr)
+    return qrcode

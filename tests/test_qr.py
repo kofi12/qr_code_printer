@@ -1,7 +1,7 @@
 import pytest
-from qrcode import image
+import segno
 from controller.qr_controller import *
 
-def test_generate_qr() -> bool:
-	qr_code = generate_qr('This is a test')
-	return isinstance(qr_code, qrcode.image.pil.PilImage)
+def test_generate_qr():
+	qrcode = generate_qr('Winner winner chicken dinner')
+	assert isinstance(qrcode, segno.QRCode)
