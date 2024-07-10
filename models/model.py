@@ -4,21 +4,17 @@ from sqlmodel import SQLModel, Field
 from datetime import datetime
 
 
-class QRC (SQLModel):
+class QRC (SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     is_winner: bool
-    date_created: datetime = Field(default_factory=datetime.now)
-    date_scanned: datetime | None = None
     url: str
 
-class User (SQLModel):
+class User (SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
     email: str
     password: str
-    qr_code: list[QRC] = []
+    new: str
 
-class Batch (SQLModel):
+class Batch (SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    date_created: datetime = Field(default_factory=datetime.now)
-    qr_list: list[QRC] = []
