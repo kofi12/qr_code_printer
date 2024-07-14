@@ -1,4 +1,5 @@
 from models.model import QRC
+from fastapi import Request, Depends
 import segno
 import pyzbar
 import json
@@ -15,3 +16,6 @@ import json
 def generate_qr(qr: str) -> segno.QRCode:
     qrcode = segno.make(qr)
     return qrcode
+
+def get_qr_by_id():
+    pass
