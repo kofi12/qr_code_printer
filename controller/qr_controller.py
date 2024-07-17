@@ -13,8 +13,8 @@ import json
 
 """
 
-def generate_qr(qr: str) -> segno.QRCode:
-    qrcode = segno.make(qr)
+def generate_qr(qr: QRC) -> segno.QRCode:
+    qrcode = segno.make(qr.model_dump_json())
     return qrcode
 
 def get_qr_by_id():
