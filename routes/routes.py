@@ -31,8 +31,8 @@ def get_codes(db: Session = Depends(db.get_session)):
 
 
 @router.get("/codes/{id}")
-def get_code_by_id(id: int, request: Request, db: Session = Depends(db.get_session)):
-    qrcode = db.exec(select(QRC).where(QRC.id == id))
+def get_code_by_id(id: int, request: Request, db: Session = Depends(db.get_session)) -> QRC | None:
+    qrcode = db.exec(select(QRC).where(QRC.id == id)).first()
     return qrcode
 
 @router.get("/decode/{id}")
