@@ -12,11 +12,11 @@ class QRC (SQLModel, table=True):
     batch_id: int | None = Field(default=None, foreign_key='batch.id')
 
 class User (SQLModel, table=True):
-    uid: uuid.UUID = Field(
+    uid: uuid.UUID | None = Field(
         sa_column=Column(pg.UUID,
             nullable=False,
             primary_key=True,
-            default=uuid.uuid4
+            default_factory=uuid.uuid4()
         )
     )
     first_name: str
@@ -24,8 +24,8 @@ class User (SQLModel, table=True):
     email: str
     password: str
     is_verified: bool = Field(default=False)
-    created_at: datetime = Field(sa_column=Column(pg.TIMESTAMP, default=datetime.now))
-    updated_at: datetime = Field(sa_column=Column(pg.TIMESTAMP, default=datetime.now))
+    created_at: datetime | None = Field(sa_column=Column(pg.TIMESTAMP, default_factory=datetime.now))
+    updated_at: datetime | None = Field(sa_column=Column(pg.TIMESTAMP, default= None))
 
     def __repr__(self) -> str:
         return f"<User {self.first_name}.{self.last_name}>"
@@ -34,3 +34,10 @@ class User (SQLModel, table=True):
 class Batch (SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     created: datetime = Field(default_factory=datetime.now)
+
+class UserSchema (BaseModel):
+    first_name: str
+    last_name: str
+    email: str
+    password: str
+    is_verified: bool = Field(default=False)

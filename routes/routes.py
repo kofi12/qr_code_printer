@@ -3,6 +3,7 @@ from sqlmodel import Session, select
 from controller.qr_controller import generate_qr
 from models import db
 from models.model import Batch, QRC
+from auth import auth
 import pyzbar
 
 router = APIRouter(prefix='/api')
@@ -22,7 +23,7 @@ async def create_codes(request: Request, db: Session = Depends(db.get_session)):
         db.add(qrcode)
     db.commit()
 
-    return batch.created_at
+    return batch.created
 
 @router.get("/codes")
 def get_codes(db: Session = Depends(db.get_session)):
@@ -40,3 +41,6 @@ def get_code_by_id(id: int, request: Request, db: Session = Depends(db.get_sessi
 def decode(request: Request):
     pass
 
+@router.post("/signup")
+async def create_user(request: Request, db: Session = Depends(db.get_session)):
+    return await auth.create_new_user(request, db)
