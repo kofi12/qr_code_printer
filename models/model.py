@@ -11,17 +11,23 @@ class QRC (SQLModel, table=True):
     is_winner: bool
     batch_id: int | None = Field(default=None, foreign_key='batch.id')
 
-# How can I ensure no missing arguments warnings
-# when trying to insert a user without the id or dates
-
-
 class Batch (SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     created: datetime = Field(default_factory=datetime.now)
 
-class UserSchema (BaseModel):
-    first_name: str
-    last_name: str
-    email: str
+class UserBase(SQLModel):
+    username: str = Field(index=True)
+    email: str = Field(unique=True, index=True)
+
+# Database model
+class UserDB(UserBase, table=True):
+    __tablename__ :str = "users"
+    id: int | None = Field(default=None, primary_key=True)
+    hashed_password: str
+
+# API models
+class UserCreate(UserBase):
     password: str
-    is_verified: bool = Field(default=False)
+
+class UserResponse(UserBase):
+    id: int
