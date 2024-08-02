@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, Depends
 from sqlmodel import Session
 from models import db
-from models.model import User, UserSchema
+from models.model import UserSchema
 from datetime import datetime
 
 async def create_new_user(request: Request, db: Session = Depends(db.get_session)):
@@ -13,7 +13,8 @@ async def create_new_user(request: Request, db: Session = Depends(db.get_session
 
     import uuid
 
-    user = User(
+    # Need to make some changes within the models
+    user = UserSchema(
         first_name=first_name,
         last_name=last_name,
         email=email,

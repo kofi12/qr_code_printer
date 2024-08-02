@@ -11,24 +11,8 @@ class QRC (SQLModel, table=True):
     is_winner: bool
     batch_id: int | None = Field(default=None, foreign_key='batch.id')
 
-class User (SQLModel, table=True):
-    uid: uuid.UUID | None = Field(
-        sa_column=Column(pg.UUID,
-            nullable=False,
-            primary_key=True,
-            default_factory=uuid.uuid4()
-        )
-    )
-    first_name: str
-    last_name: str
-    email: str
-    password: str
-    is_verified: bool = Field(default=False)
-    created_at: datetime | None = Field(sa_column=Column(pg.TIMESTAMP, default_factory=datetime.now))
-    updated_at: datetime | None = Field(sa_column=Column(pg.TIMESTAMP, default= None))
-
-    def __repr__(self) -> str:
-        return f"<User {self.first_name}.{self.last_name}>"
+# How can I ensure no missing arguments warnings
+# when trying to insert a user without the id or dates
 
 
 class Batch (SQLModel, table=True):
