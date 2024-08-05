@@ -1,6 +1,5 @@
 import uuid
 from pydantic import BaseModel, Field
-from sqlalchemy import TIMESTAMP
 from sqlmodel import SQLModel, Field, Column
 import sqlalchemy.dialects.postgresql as pg
 from datetime import datetime
@@ -23,11 +22,5 @@ class UserBase(SQLModel):
 class UserDB(UserBase, table=True):
     __tablename__ :str = "users"
     id: int | None = Field(default=None, primary_key=True)
+    created: datetime = Field(sa_column=Column(pg.TIMESTAMP), default=datetime.now)
     hashed_password: str
-
-# API models
-class UserCreate(UserBase):
-    password: str
-
-class UserResponse(UserBase):
-    id: int
