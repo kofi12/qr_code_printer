@@ -1,4 +1,4 @@
-from model import UserBase, UserDB
+from .model import UserBase, UserDB
 
 # API models
 class UserCreate(UserBase):

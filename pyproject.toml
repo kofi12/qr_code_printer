@@ -17,9 +17,8 @@ alembic = "^1.13.2"
 python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.9"
 pyjwt = "^2.8.0"
-passlib = "^1.7.4"
 python-multipart = "^0.0.9"
-bcrypt = "^4.2.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]

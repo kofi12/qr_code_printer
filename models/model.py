@@ -22,5 +22,5 @@ class UserBase(SQLModel):
 class UserDB(UserBase, table=True):
     __tablename__ :str = "users"
     id: int | None = Field(default=None, primary_key=True)
-    created: datetime = Field(sa_column=Column(pg.TIMESTAMP), default=datetime.now)
+    created: datetime = Field(sa_column=Column(pg.TIMESTAMP), default_factory=datetime.now)
     hashed_password: str

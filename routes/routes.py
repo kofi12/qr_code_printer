@@ -40,7 +40,3 @@ def get_code_by_id(id: int, request: Request, db: Session = Depends(db.get_sessi
 @router.get("/decode/{id}")
 def decode(request: Request):
     pass
-
-@router.post("/signup")
-async def create_user(request: Request, db: Session = Depends(db.get_session)):
-    return await auth.create_new_user(request, db)
