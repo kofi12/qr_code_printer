@@ -1,4 +1,5 @@
 from .model import UserBase, UserDB
+from pydantic import BaseModel
 
 # API models
 class UserCreate(UserBase):
@@ -6,3 +7,7 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
+
+class UserLogin(BaseModel):
+    email: str
+    password: str

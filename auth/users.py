@@ -28,15 +28,23 @@ def create_user(user_data: UserCreate,
 #Helper methods
 def user_exists(user_data: UserCreate,
                 session: Session = Depends(get_session)) -> bool:
-    user = get_user_by_email(user_data, session)
+    email = user_data.email
+    user = get_user_by_email(email, session)
     if user is None:
         return False
     return True
 
-def get_user_by_email(user_data: UserCreate,
+def get_user_by_email(email: str,
                       session: Session = Depends(get_session)) -> UserDB | None:
-    email = user_data.email
+
     statement = select(UserDB).where(UserDB.email == email)
+    result = session.exec(statement)
+    return result.first()
+
+def get_user(user_data: UserCreate,
+             session: Session = Depends(get_session)) -> UserDB | None:
+    username = user_data.username
+    statement = select(UserDB).where(UserDB.username == username)
     result = session.exec(statement)
     return result.first()
 

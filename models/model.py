@@ -24,3 +24,10 @@ class UserDB(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     created: datetime = Field(sa_column=Column(pg.TIMESTAMP), default_factory=datetime.now)
     hashed_password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str | None = None

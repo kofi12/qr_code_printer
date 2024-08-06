@@ -1,9 +1,22 @@
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from fastapi import Depends
+from sqlmodel import Session
+from ..models.db import get_session
 import jwt
+import json
+from jwt import PyJWTError
+import logging
+import uuid
 import bcrypt
+import os
+from dotenv import load_dotenv, find_dotenv
 
-passwd_context = CryptContext (schemes = ['bcrypt'])
+ACCESS_TOKEN_EXPIRY = 3600
+
+load_dotenv(find_dotenv())
+JWT_SECRET = os.getenv('JWT_SECRET', '')
+JWT_ALGORITHM = os.getenv('JWT_ALGORITHM', '')
 
 def hash_passwd(password: str) -> str:
     pwd_bytes = password.encode('utf-8')
@@ -13,10 +26,40 @@ def hash_passwd(password: str) -> str:
 
 def verify_passwd(password: str, hash) -> bool:
     password_byte_enc = password.encode('utf-8')
-    return bcrypt.checkpw(password = password_byte_enc , hashed_password = hash)
+    hash_byte_enc = hash.encode('utf-8')
+    return bcrypt.checkpw(password = password_byte_enc , hashed_password = hash_byte_enc)
 
-def create_access_token(user_data: dict, expiry: timedelta):
+def create_access_token(user_data: dict, expiry: timedelta, refresh: bool = False):
     payload = {}
+    if expiry:
+        expire = datetime.now(timezone.utc) + expiry
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
 
-    payload['user'] = user_data['username']
-    payload['exp'] = datetime.now() + expiry
+    payload['user'] = user_data
+    payload['exp'] = expire.isoformat()
+    payload['jti'] = str(uuid.uuid4())
+    payload['refresh'] = refresh
+
+    json_data = json.dumps(payload, default= str)
+
+    token = jwt.encode(
+        payload=payload,
+        key=JWT_SECRET,
+        algorithm=JWT_ALGORITHM
+    )
+
+    return token
+
+def decode_token(token: str) -> dict | None:
+
+    try:
+        token_data = jwt.decode(
+            jwt=token,
+            key=JWT_SECRET,
+            algorithms=[JWT_ALGORITHM]
+        )
+        return token_data
+    except PyJWTError as e:
+        logging.exception(e)
+        return None
