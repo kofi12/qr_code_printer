@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Request, Depends
 from sqlmodel import Session, select
-from controller.qr_controller import generate_qr
-from models import db
-from models.model import Batch, QRC
-from auth import auth
+from ..models import db
+from ..models.model import Batch, QRC
+from ..auth import auth
 import pyzbar
 
 router = APIRouter(prefix='/api')

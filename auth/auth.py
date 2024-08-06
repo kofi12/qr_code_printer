@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Request, Depends, APIRouter
 from sqlmodel import Session
 from .users import create_user
-from models.db import get_session
-from models.model import UserDB
-from models.schemas import UserCreate
+from ..models.db import get_session
+from ..models.model import UserDB
+from ..models.schemas import UserCreate
 from datetime import datetime
 
 auth_router = APIRouter(prefix='/auth')

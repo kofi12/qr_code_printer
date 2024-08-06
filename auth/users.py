@@ -1,9 +1,9 @@
 from fastapi import Depends, status
 from sqlmodel import Session, select
-from models.model import UserDB
-from models.schemas import UserCreate
+from ..models.model import UserDB
+from ..models.schemas import UserCreate
 from .utils import hash_passwd, verify_passwd
-from models.db import get_session
+from ..models.db import get_session
 from fastapi.exceptions import HTTPException
 
 #Define user functions, create, ect.
@@ -14,9 +14,9 @@ def create_user(user_data: UserCreate,
 
     if not user_exists(user_data, session):
         user = UserDB(
-            **user_data_dict
+            **user_data_dict,
+            hashed_password = hash_passwd(user_data_dict['password'])
         )
-        user.hashed_password = hash_passwd(user_data_dict['password'])
 
         session.add(user)
         session.commit()
