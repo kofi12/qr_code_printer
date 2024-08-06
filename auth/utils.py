@@ -24,10 +24,20 @@ def hash_passwd(password: str) -> str:
     hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
     return hashed_password.decode('utf-8')
 
-def verify_passwd(password: str, hash) -> bool:
+def verify_passwd(password: str, hash: str) -> bool:
     password_byte_enc = password.encode('utf-8')
     hash_byte_enc = hash.encode('utf-8')
     return bcrypt.checkpw(password = password_byte_enc , hashed_password = hash_byte_enc)
+
+def authenticate_user(username: str, password: str,
+                      session: Session = Depends(get_session)):
+    from .users import get_user
+    user = get_user(username, session)
+    if not user:
+        return False
+    if not verify_passwd(password, user.hashed_password):
+        return False
+    return user
 
 def create_access_token(user_data: dict, expiry: timedelta, refresh: bool = False):
     payload = {}
@@ -40,8 +50,6 @@ def create_access_token(user_data: dict, expiry: timedelta, refresh: bool = Fals
     payload['exp'] = expire.isoformat()
     payload['jti'] = str(uuid.uuid4())
     payload['refresh'] = refresh
-
-    json_data = json.dumps(payload, default= str)
 
     token = jwt.encode(
         payload=payload,

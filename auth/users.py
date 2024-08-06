@@ -41,9 +41,8 @@ def get_user_by_email(email: str,
     result = session.exec(statement)
     return result.first()
 
-def get_user(user_data: UserCreate,
+def get_user(username: str,
              session: Session = Depends(get_session)) -> UserDB | None:
-    username = user_data.username
     statement = select(UserDB).where(UserDB.username == username)
     result = session.exec(statement)
     return result.first()
