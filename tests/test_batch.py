@@ -1,5 +1,5 @@
 import pytest
-from routes.routes import create_codes
+from routes.qr_routes import create_codes
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 from models.model import Batch, QRC
