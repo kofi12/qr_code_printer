@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from sqlmodel import Session, select
 from ..models import db
 from ..models.model import Batch, QRC
-from ..auth import auth
+from ..controller.qr_controller import get_qr_by_id
 import pyzbar
 
 router = APIRouter(prefix='/api')
@@ -22,7 +22,7 @@ async def create_codes(request: Request, db: Session = Depends(db.get_session)):
         db.add(qrcode)
     db.commit()
 
-    return batch.created
+    return batch
 
 @router.get("/codes")
 def get_codes(db: Session = Depends(db.get_session)):
@@ -30,11 +30,12 @@ def get_codes(db: Session = Depends(db.get_session)):
     qrcodes = db.exec(select(QRC)).all()
     return qrcodes
 
+@router.get('/display-codes')
+
 
 @router.get("/codes/{id}")
-def get_code_by_id(id: int, request: Request, db: Session = Depends(db.get_session)) -> QRC | None:
-    qrcode = db.exec(select(QRC).where(QRC.id == id)).first()
-    return qrcode
+def get_code_by_id(id: int, request: Request, session: Session = Depends(db.get_session)) -> QRC | None:
+    return get_qr_by_id(id, session)
 
 @router.get("/decode/{id}")
 def decode(request: Request):

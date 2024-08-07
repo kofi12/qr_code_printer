@@ -1,5 +1,8 @@
-from models.model import QRC
-from fastapi import Request, Depends
+from ..models.model import QRC
+from ..models.db import get_session
+from fastapi import Request, Depends, status
+from sqlmodel import Session, select
+from fastapi.exceptions import HTTPException
 import segno
 import pyzbar
 import json
@@ -14,8 +17,15 @@ import json
 """
 
 def generate_qr(qr: QRC) -> segno.QRCode:
+    url = f"http://localhost:8000/generate/{qr.id}"
     qrcode = segno.make(qr.model_dump_json())
     return qrcode
 
-def get_qr_by_id():
-    pass
+def get_qr_by_id(qr_id: int,
+                 session: Session = Depends(get_session)):
+    statement = select(QRC).where(QRC.id == qr_id)
+    try:
+        result = session.exec(statement)
+        return result.first()
+    except:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The qrcode does not exist")

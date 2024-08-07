@@ -7,7 +7,7 @@ from datetime import datetime
 
 class QRC (SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    is_winner: bool
+    is_winner: bool = Field(default=False)
     batch_id: int | None = Field(default=None, foreign_key='batch.id')
 
 class Batch (SQLModel, table=True):
