@@ -38,7 +38,7 @@ def authenticate_user(username: str, password: str,
         return False
     return user
 
-def create_access_token(user_data: dict, expiry: timedelta, refresh: bool = False):
+def create_access_token(user_data: dict, expiry: timedelta | None = None, refresh: bool = False):
     payload = {}
     if expiry:
         expire = datetime.now(timezone.utc) + expiry
@@ -46,7 +46,7 @@ def create_access_token(user_data: dict, expiry: timedelta, refresh: bool = Fals
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
 
     payload['user'] = user_data
-    payload['exp'] = expire.isoformat()
+    payload['exp'] = expire
     payload['jti'] = str(uuid.uuid4())
     payload['refresh'] = refresh
 

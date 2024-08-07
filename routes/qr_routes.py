@@ -1,34 +1,19 @@
 from fastapi import APIRouter, Request, Depends
+from fastapi.responses import JSONResponse
 from sqlmodel import Session, select
 from ..models import db
 from ..models.model import Batch, QRC
-from ..controller.qr_controller import get_qr_by_id
-import pyzbar
+from ..controller.qr_controller import get_qr_by_id, get_qrcodes, generate_qr
 
 qr_router = APIRouter(prefix='/api')
 
-@qr_router.post("/create-batch")
-async def create_codes(request: Request, db: Session = Depends(db.get_session)):
-    data = await request.json()
-    num_codes = data['number']
-
-    batch = Batch()
-    db.add(batch)
-    db.commit()
-    db.refresh(batch)
-
-    for i in range(num_codes):
-        qrcode = QRC(is_winner=False, batch_id=batch.id)
-        db.add(qrcode)
-    db.commit()
-
-    return batch
+@qr_router.get("/create-batch/{batch_size}", response_class=JSONResponse)
+async def create_codes(batch_size: int, request: Request, db: Session = Depends(db.get_session)):
+    return generate_qr(batch_size, db)
 
 @qr_router.get("/codes")
 def get_codes(db: Session = Depends(db.get_session)):
-    qrcodes = []
-    qrcodes = db.exec(select(QRC)).all()
-    return qrcodes
+    return get_qrcodes(db)
 
 @qr_router.get('/display-codes')
 
@@ -37,6 +22,3 @@ def get_codes(db: Session = Depends(db.get_session)):
 def get_code_by_id(id: int, request: Request, session: Session = Depends(db.get_session)) -> QRC | None:
     return get_qr_by_id(id, session)
 
-@qr_router.get("/decode/{id}")
-def decode(request: Request):
-    pass
