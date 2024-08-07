@@ -4,7 +4,6 @@ from fastapi import Depends
 from sqlmodel import Session
 from ..models.db import get_session
 import jwt
-import json
 from jwt import PyJWTError
 import logging
 import uuid

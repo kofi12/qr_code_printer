@@ -1,11 +1,9 @@
 from ..models.model import QRC
 from ..models.db import get_session
-from fastapi import Request, Depends, status
+from fastapi import Depends, status
 from sqlmodel import Session, select
 from fastapi.exceptions import HTTPException
 import segno
-import pyzbar
-import json
 
 """
     How to generate qrcodes using the qrcode library
