@@ -15,10 +15,27 @@
 </head>
 <body>
     <h1>Batch of QR Codes</h1>
+    <div>
+        <label for="batch">Generate how many codes</label>
+        <input type="number" id="codes" placeholder="Enter number of codes" required>
+    </div>
+    <button id="generateButton">Generate</button>
+
     <div id="qr-codes"></div>
 
     <script>
-        async function fetchQRCodes(batchSize) {
+
+        function clearQRCode() {
+            const qrCodeContainer = document.getElementById('qr-codes');
+            qrCodeContainer.innerHTML = '';
+          }
+
+        async function fetchQRCodes() {
+
+            clearQRCode();
+
+            const batchSize = document.getElementById("codes").value;
+
             try {
                 const response = await fetch(`http://localhost:8000/api/create-batch/${batchSize}`);
                 if (!response.ok) {
@@ -52,23 +69,8 @@
                 document.getElementById('qr-codes').textContent = `Error fetching QR codes: ${error.message}`;
             }
         }
-
-        async function testSingleQRCode() {
-            const testQRCode = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
-            const img = document.createElement('img');
-            img.src = `data:image/png;base64,${testQRCode}`;
-            img.classList.add('qr-code');
-            img.alt = 'Test QR Code';
-            img.onerror = () => console.error('Failed to load test QR code');
-            img.onload = () => console.log('Successfully loaded test QR code');
-            document.getElementById('qr-codes').appendChild(img);
-        }
-
-        // Fetch and render a batch of 10 QR codes
-        fetchQRCodes(2).then(() => {
-            // After fetching QR codes, test with a single known working QR code
-            testSingleQRCode();
-        });
+        // Fetch and render a batch of 2 QR codes
+        document.getElementById('generateButton').addEventListener('click', fetchQRCodes);
     </script>
 </body>
 </html>

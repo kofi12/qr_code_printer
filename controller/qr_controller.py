@@ -23,7 +23,6 @@ def generate_qr(batch_size: int,
     session.add(batch)
     session.commit()
     batch_id = batch.id
-    print(batch_id)
     qr_codes = []
 
     for i in range(batch_size):
