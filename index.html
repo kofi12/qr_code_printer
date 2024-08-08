@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Batch</title>
+    <style>
+        .qr-code {
+            margin: 10px;
+            display: inline-block;
+            border: 1px solid black;
+            min-width: 50px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Batch of QR Codes</h1>
+    <div id="qr-codes"></div>
+
+    <script>
+        async function fetchQRCodes(batchSize) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/create-batch/${batchSize}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('API Response:', data);
+                const qrCodes = data.qrcodes;
+                console.log('QR Codes:', qrCodes);
+                const qrCodesDiv = document.getElementById('qr-codes');
+
+                if (!qrCodes || qrCodes.length === 0) {
+                    console.log('No QR codes received from the API');
+                    qrCodesDiv.textContent = 'No QR codes received';
+                    return;
+                }
+
+                qrCodes.forEach((qrCode, index) => {
+                    console.log(`Creating image for QR code ${index + 1}`);
+                    const img = document.createElement('img');
+                    img.src = `data:image/png;base64,${qrCode}`;
+                    img.classList.add('qr-code');
+                    img.alt = `QR Code ${index + 1}`;
+                    img.onerror = () => console.error(`Failed to load QR code ${index + 1}`);
+                    img.onload = () => console.log(`Successfully loaded QR code ${index + 1}`);
+                    qrCodesDiv.appendChild(img);
+                    console.log(`Appended image for QR code ${index + 1} to DOM`);
+                });
+            } catch (error) {
+                console.error('Error fetching QR codes:', error);
+                document.getElementById('qr-codes').textContent = `Error fetching QR codes: ${error.message}`;
+            }
+        }
+
+        async function testSingleQRCode() {
+            const testQRCode = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
+            const img = document.createElement('img');
+            img.src = `data:image/png;base64,${testQRCode}`;
+            img.classList.add('qr-code');
+            img.alt = 'Test QR Code';
+            img.onerror = () => console.error('Failed to load test QR code');
+            img.onload = () => console.log('Successfully loaded test QR code');
+            document.getElementById('qr-codes').appendChild(img);
+        }
+
+        // Fetch and render a batch of 10 QR codes
+        fetchQRCodes(2).then(() => {
+            // After fetching QR codes, test with a single known working QR code
+            testSingleQRCode();
+        });
+    </script>
+</body>
+</html>

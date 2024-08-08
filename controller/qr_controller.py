@@ -20,14 +20,17 @@ def generate_qr(batch_size: int,
                 session: Session = Depends(get_session)):
     # need to add logic for random winner
     batch = Batch()
+    session.add(batch)
+    session.commit()
     batch_id = batch.id
+    print(batch_id)
     qr_codes = []
 
     for i in range(batch_size):
         q = QRC(batch_id=batch_id)
-        url = f"http://localhost:8000/codes/{q.id}"
         session.add(q)
         session.commit()
+        url = f"http://localhost:8000/codes/{q.id}"
         qr = segno.make(url)
         buffer = BytesIO()
         qr.save(buffer, kind = 'png')
