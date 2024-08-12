@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import Depends
 from sqlmodel import Session
-from ..models.db import get_session
+from models.db import get_session
 import jwt
 from jwt import PyJWTError
 import logging

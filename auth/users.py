@@ -1,9 +1,9 @@
 from fastapi import Depends, status
 from sqlmodel import Session, select
-from ..models.model import UserDB
-from ..models.schemas import UserCreate
-from .utils import hash_passwd, verify_passwd
-from ..models.db import get_session
+from models.model import UserDB
+from models.schemas import UserCreate
+from auth.utils import hash_passwd, verify_passwd
+from models.db import get_session
 from fastapi.exceptions import HTTPException
 
 #Define user functions, create, ect.

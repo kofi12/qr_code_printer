@@ -1,5 +1,5 @@
-from ..models.model import QRC, Batch
-from ..models.db import get_session
+from models.model import QRC, Batch
+from models.db import get_session
 from fastapi import Depends, status
 from sqlmodel import Session, select
 from fastapi.exceptions import HTTPException

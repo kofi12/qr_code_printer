@@ -2,11 +2,11 @@ from fastapi import Depends, APIRouter, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from sqlmodel import Session
-from ..auth.users import create_user, get_user_by_email
-from ..models.db import get_session
-from ..models.model import UserDB
-from ..models.schemas import UserCreate, UserLogin
-from ..auth.utils import create_access_token, decode_token, verify_passwd
+from auth.users import create_user, get_user_by_email
+from models.db import get_session
+from models.model import UserDB
+from models.schemas import UserCreate, UserLogin
+from auth.utils import create_access_token, decode_token, verify_passwd
 from datetime import timedelta
 
 REFRESH_TOKEN_EXPIRY = 2

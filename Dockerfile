@@ -1,4 +1,4 @@
-FROM python:3.11-slim as python-base
+FROM python:3.11-slim AS python-base
 
 RUN pip install poetry==1.8.2
 
@@ -14,7 +14,7 @@ RUN touch README.md
 
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-COPY . .
+COPY . /app
 
 RUN poetry install
 

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import JSONResponse
 from sqlmodel import Session, select
-from ..models import db
-from ..models.model import Batch, QRC
-from ..controller.qr_controller import get_qr_by_id, get_qrcodes, generate_qr
+from models import db
+from models.model import QRC
+from controller.qr_controller import get_qr_by_id, get_qrcodes, generate_qr
 
 qr_router = APIRouter(prefix='/api')
 

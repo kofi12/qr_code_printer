@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes.qr_routes import qr_router
-from .routes.auth_route import auth_router
+from routes.qr_routes import qr_router
+from routes.auth_route import auth_router
 
 app = FastAPI()
 app.add_middleware(
